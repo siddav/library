@@ -1,6 +1,8 @@
 package com.sidda.library.model;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -19,6 +21,7 @@ public class UserBook {
 	@JoinColumn
 	private User user;
 
+	@Enumerated(EnumType.STRING)
 	private UserBookStatus status;
 
 	public UserBook() {
