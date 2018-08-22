@@ -19,13 +19,24 @@ public class UserBook {
 	@JoinColumn
 	private User user;
 
+	private UserBookStatus status;
+
 	public UserBook() {
 
 	}
 
-	public UserBook(Book b, User u) {
-		this.book = b;
+	public UserBook(User u, Book b, UserBookStatus status) {
 		this.user = u;
+		this.book = b;
+		this.status = status;
+	}
+
+	public UserBookStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(UserBookStatus status) {
+		this.status = status;
 	}
 
 	public Book getBook() {
@@ -42,6 +53,11 @@ public class UserBook {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	@Override
+	public String toString() {
+		return "UserBook [id=" + id + ", book=" + book + ", user=" + user + ", status=" + status + "]";
 	}
 
 }

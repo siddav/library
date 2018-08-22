@@ -10,7 +10,9 @@ import org.springframework.context.annotation.ComponentScan;
 
 import com.sidda.library.model.Book;
 import com.sidda.library.model.User;
+import com.sidda.library.model.UserBook;
 import com.sidda.library.service.BookService;
+import com.sidda.library.service.UserBookService;
 import com.sidda.library.service.UserService;
 
 @SpringBootApplication
@@ -20,10 +22,13 @@ public class LibraryApplication implements CommandLineRunner {
 	private Logger logger = LoggerFactory.getLogger(LibraryApplication.class);
 	
 	@Autowired
-	BookService bookService;
+	private BookService bookService;
 	
 	@Autowired
-	UserService userService;
+	private UserService userService;
+	
+	@Autowired
+	private UserBookService userBookService;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(LibraryApplication.class, args);
@@ -43,7 +48,7 @@ public class LibraryApplication implements CommandLineRunner {
 		
 		logger.info("All books -> {}", bookService.findAll());
 
-		logger.info("Update Book 1 -> {}", bookService.save(new Book(1L, "978-0-13-235088", "Robert C. Martin", "Clean Code")));
+		logger.info("Update Book cleanCode -> {}", bookService.save(new Book(cleanCode.getId(), "978-0-13-235088", "Robert C. Martin", "Clean Code")));
 		
 		logger.info("Book find by id 1 -> {}", bookService.findById(1L));
 		
@@ -51,7 +56,7 @@ public class LibraryApplication implements CommandLineRunner {
 		
 		logger.info("Book find by title kalki -> {}", bookService.findByTitle("Kalki"));
 		
-		User john = new User(1L, "john123", "john", "john@gmail.com");
+		User john = new User("john123", "john", "john@gmail.com");
 		logger.info("Inserting User -> {}", userService.save(john));
 		
 		User doe = new User("doe13", "doe", "doe@gmail.com");
@@ -61,9 +66,9 @@ public class LibraryApplication implements CommandLineRunner {
 		
 		logger.info("User find by name john -> {}", userService.findByName("john"));
 		
-//
-//		repository.deleteById(10002L);
-//
-//		logger.info("All users -> {}", repository.findAll());
+		UserBook userBook = userBookService.lendBook(john, cleanCode);
+		logger.info("User John lend book cleanCode -> {}", userBook);		
+		logger.info("User John return book cleanCode -> {}", userBookService.returnBook(userBook));
+
 	}
 }
