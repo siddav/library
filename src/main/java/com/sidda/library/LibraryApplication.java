@@ -12,7 +12,6 @@ import com.sidda.library.exception.BookNotAvailableException;
 import com.sidda.library.exception.BooksLimitExceededException;
 import com.sidda.library.model.Book;
 import com.sidda.library.model.User;
-import com.sidda.library.model.UserBook;
 import com.sidda.library.service.BookService;
 import com.sidda.library.service.UserBookService;
 import com.sidda.library.service.UserService;

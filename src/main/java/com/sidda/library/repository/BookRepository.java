@@ -1,41 +1,46 @@
 package com.sidda.library.repository;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import com.sidda.library.db.DataHolder;
 import com.sidda.library.model.Book;
 
 @Repository
 public class BookRepository {
-	private List<Book> books = new ArrayList<>();
+	
+	@Autowired
+	@Qualifier("inmemory")
+	private DataHolder datasource;
 
 	public List<Book> findByAuthor(String author) {
-		return Collections.unmodifiableList(books.stream().filter(b -> b.getAuthor().equalsIgnoreCase(author)).collect(Collectors.toList()));
+		return datasource.getBooks().stream().filter(b -> b.getAuthor().equalsIgnoreCase(author)).collect(Collectors.toList());
 	}
 
 	public List<Book> findByTitle(String title) {
-		return Collections.unmodifiableList(books.stream().filter(b -> b.getTitle().equalsIgnoreCase(title)).collect(Collectors.toList()));
+		return datasource.getBooks().stream().filter(b -> b.getTitle().equalsIgnoreCase(title)).collect(Collectors.toList());
 	}
 
 	public void saveAll(List<Book> books) {
-		if (books != null && books.size() > 0) {
-			books.addAll(books);
-		}
+		books.forEach(book -> {
+			datasource.save(book);
+		});		
 	}
 
 	public Book findById(String id) {
-		return books.stream().filter(b -> b.getId().equalsIgnoreCase(id)).findFirst().get();
+		return datasource.getBooks().stream().filter(b -> b.getId().equalsIgnoreCase(id)).findFirst().get();
 	}
 
 	public void save(Book b) {
-		books.add(b);
+		datasource.save(b);
 	}
 
 	public List<Book> findAll() {
-		return Collections.unmodifiableList(books);
+		return datasource.getBooks();
 	}
+	
 }
