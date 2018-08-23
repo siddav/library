@@ -1,38 +1,27 @@
 package com.sidda.library.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.sidda.library.util.Utils;
 
-@Entity
 public class User {
-	@Id
-	@GeneratedValue
-	private Long id;	
-	private String userId;
+	private String id;	
 	private String name;
 	private String email;
 	
 	public User() {
-		
+		this.id = Utils.newIDString();
 	}
 
 	public User(String userId, String name, String email) {
-		this.userId = userId;		
+		this();	
 		this.name = name;
 		this.email = email;
-	}
+	}	
 
-	public User(Long id, String userId, String name, String email) {
-		this(userId, name, email);
-		this.id = id;
-	}
-
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -50,15 +39,7 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+	}	
 
 	public String getFullName() {
 		return name;
@@ -74,7 +55,6 @@ public class User {
 		int result = 1;
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
 		return result;
 	}
 
@@ -96,18 +76,13 @@ public class User {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
-			return false;
-		if (userId == null) {
-			if (other.userId != null)
-				return false;
-		} else if (!userId.equals(other.userId))
-			return false;
+			return false;		
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", userId=" + userId + ", name=" + name + ", email=" + email + "]";
+		return "User [id=" + id +  ", name=" + name + ", email=" + email + "]";
 	}	
 
 }

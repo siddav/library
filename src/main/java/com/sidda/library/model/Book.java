@@ -1,46 +1,32 @@
 package com.sidda.library.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.sidda.library.util.Utils;
 
-@Entity
 public class Book {
-
-	@Id
-	@GeneratedValue
-	private Long id;
+	
+	private String id;
 	private String isbn;
 	private String author;
 	private String title;
 	private BookStatus status;
 
 	public Book() {
-
+      this.id = Utils.newIDString();
 	}
 
 	public Book(String isbn, String author, String title) {
+		this();
 		this.isbn = isbn;
 		this.author = author;
 		this.title = title;
 		this.status = BookStatus.AVAILABLE;
-	}
-	
-	public Book(Long id, String isbn, String author, String title) {
-		this(isbn, author, title);
-		this.id = id;				
-	}
-	
-	public Book(Long id, String isbn, String author, String title, BookStatus status) {
-		this(id, isbn, author, title);
-		this.status = status;			
-	}
+	}	
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

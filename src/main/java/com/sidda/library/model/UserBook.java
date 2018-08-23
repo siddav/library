@@ -1,34 +1,20 @@
 package com.sidda.library.model;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import com.sidda.library.util.Utils;
 
-@Entity
 public class UserBook {
 
-	@Id
-	@GeneratedValue
-	private Long id;
-	@ManyToOne
-	@JoinColumn
+	private String id;
 	private Book book;
-	@ManyToOne
-	@JoinColumn
 	private User user;
-
-	@Enumerated(EnumType.STRING)
 	private UserBookStatus status;
 
 	public UserBook() {
-
+		this.id = Utils.newIDString();
 	}
 
 	public UserBook(User u, Book b, UserBookStatus status) {
+		this();
 		this.user = u;
 		this.book = b;
 		this.status = status;

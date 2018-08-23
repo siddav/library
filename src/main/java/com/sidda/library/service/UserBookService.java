@@ -2,9 +2,6 @@ package com.sidda.library.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,8 +25,7 @@ public class UserBookService {
 	@Value("${library.lend.books.limit}")
 	private int lendBooksLimit;
 
-	@Transactional
-	public UserBook lendBook(User user, Book book) throws BooksLimitExceededException, BookNotAvailableException {
+	public void lendBook(User user, Book book) throws BooksLimitExceededException, BookNotAvailableException {
 		Assert.notNull(book, "Expecting a valid book");
 		if (!book.available()) {
 			throw new BookNotAvailableException("Book is not available");
@@ -38,17 +34,16 @@ public class UserBookService {
 		userBooks = userBooks != null ? userBooks : new ArrayList<>();
 		if (userBooks.size() < lendBooksLimit) {
 			book.setStatus(BookStatus.LENT);
-			return repository.save(new UserBook(user, book, UserBookStatus.LEND));
+			repository.save(new UserBook(user, book, UserBookStatus.LEND));
 		} else {
 			throw new BooksLimitExceededException();
 		}
 	}
 
-	@Transactional
-	public UserBook returnBook(UserBook userBook) {
+	public void returnBook(UserBook userBook) {
 		userBook.setStatus(UserBookStatus.RETURN);
 		userBook.getBook().setStatus(BookStatus.AVAILABLE);
-		return repository.save(userBook);
+		repository.save(userBook);
 	}
 
 	public List<UserBook> getAllLendBooks(User user) {
@@ -56,4 +51,8 @@ public class UserBookService {
 		return userBooks;
 	}
 
+	public List<UserBook> getAllReturnBooks(User user) {
+		List<UserBook> userBooks = repository.findBooksForaGivenUser(user.getId(), UserBookStatus.RETURN);
+		return userBooks;
+	}
 }

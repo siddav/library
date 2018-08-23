@@ -1,16 +1,41 @@
 package com.sidda.library.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Repository;
 
 import com.sidda.library.model.Book;
 
-public interface BookRepository extends JpaRepository<Book, Long> {
+@Repository
+public class BookRepository {
+	private List<Book> books = new ArrayList<>();
 
-    @Query("SELECT b FROM Book b where b.author = :author")
-	Book findByAuthor(@Param("author") String author);
+	public List<Book> findByAuthor(String author) {
+		return Collections.unmodifiableList(books.stream().filter(b -> b.getAuthor().equalsIgnoreCase(author)).collect(Collectors.toList()));
+	}
 
-    @Query("SELECT b FROM Book b where b.title = :title")
-	Book findByTitle(@Param("title") String title);
+	public List<Book> findByTitle(String title) {
+		return Collections.unmodifiableList(books.stream().filter(b -> b.getTitle().equalsIgnoreCase(title)).collect(Collectors.toList()));
+	}
+
+	public void saveAll(List<Book> books) {
+		if (books != null && books.size() > 0) {
+			books.addAll(books);
+		}
+	}
+
+	public Book findById(String id) {
+		return books.stream().filter(b -> b.getId().equalsIgnoreCase(id)).findFirst().get();
+	}
+
+	public void save(Book b) {
+		books.add(b);
+	}
+
+	public List<Book> findAll() {
+		return Collections.unmodifiableList(books);
+	}
 }

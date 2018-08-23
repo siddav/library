@@ -1,16 +1,39 @@
 package com.sidda.library.repository;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import com.sidda.library.model.UserBook;
 import com.sidda.library.model.UserBookStatus;
 
-public interface UserBookRepository extends JpaRepository<UserBook, Long> {
+@Repository
+public class UserBookRepository {
 
-	 @Query("SELECT ub FROM UserBook ub where ub.user.id = :userId AND ub.status = :status")
-	 List<UserBook> findBooksForaGivenUser(@Param("userId") Long userId, @Param("status") UserBookStatus status);
+	List<UserBook> userBooks = new ArrayList<>();
+
+	public List<UserBook> findBooksForaGivenUser(String userId, UserBookStatus status) {
+		return userBooks.stream().filter(ub -> {
+			return ub.getUser().getId().equalsIgnoreCase(userId) && ub.getStatus() == status;
+		}).collect(Collectors.toList());
+	}
+
+	public void save(UserBook userBook) {
+		userBooks.add(userBook);
+	}
+	
+	public List<UserBook> findUserBooksByUserId(String userId) {
+		return Collections.unmodifiableList(userBooks.stream().filter(ub -> ub.getUser().getId().equalsIgnoreCase(userId)).collect(Collectors.toList()));
+	}
+	
+	public List<UserBook> findUserBooksByBookId(String bookId) {
+		return Collections.unmodifiableList(userBooks.stream().filter(ub -> ub.getBook().getId().equalsIgnoreCase(bookId)).collect(Collectors.toList()));
+	}
+	
+	public List<UserBook> findUserBooksByUserIdAndBookId(String userId, String bookId) {
+		return Collections.unmodifiableList(userBooks.stream().filter(ub -> ub.getBook().getId().equalsIgnoreCase(bookId) && ub.getUser().getId().equalsIgnoreCase(userId)).collect(Collectors.toList()));
+	}
 }
